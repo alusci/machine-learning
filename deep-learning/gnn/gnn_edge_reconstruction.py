@@ -55,7 +55,7 @@ def train():
 for epoch in range(200):
     loss = train()
     if epoch % 20 == 0:
-        print(f'Epoch {epoch}, Loss: {loss:.4f}')
+        print(f"Epoch {epoch}, Loss: {loss:.4f}")
 
 # Get the learned embeddings
 model.eval()

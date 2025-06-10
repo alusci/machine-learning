@@ -5,8 +5,12 @@ import torchvision
 import torchvision.transforms as transforms
 
 # Load dataset
-transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
-trainset = torchvision.datasets.MNIST(root='./data', train=True, download=True, transform=transform)
+transform = transforms.Compose(
+    [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))]
+)
+trainset = torchvision.datasets.MNIST(
+    root="./data", train=True, download=True, transform=transform
+)
 trainloader = torch.utils.data.DataLoader(trainset, batch_size=64, shuffle=True)
 
 
@@ -20,7 +24,7 @@ class Generator(nn.Module):
             nn.Linear(256, 512),
             nn.ReLU(),
             nn.Linear(512, 784),
-            nn.Tanh()
+            nn.Tanh(),
         )
 
     def forward(self, x):
@@ -37,7 +41,7 @@ class Discriminator(nn.Module):
             nn.Linear(512, 256),
             nn.ReLU(),
             nn.Linear(256, 1),
-            nn.Sigmoid()
+            nn.Sigmoid(),
         )
 
     def forward(self, x):

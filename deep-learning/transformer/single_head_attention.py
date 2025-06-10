@@ -2,6 +2,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+
 class SelfAttention(nn.Module):
     def __init__(self, embed_dim, dropout=0.1):
         super().__init__()
@@ -25,7 +26,7 @@ class SelfAttention(nn.Module):
         v = self.v_proj(x)
 
         # Scaled dot-product attention
-        attn_scores = torch.matmul(q, k.transpose(-2, -1)) / (D ** 0.5)  # (B, T, T)
+        attn_scores = torch.matmul(q, k.transpose(-2, -1)) / (D**0.5)  # (B, T, T)
 
         if mask is not None:
             attn_scores = attn_scores.masked_fill(mask == 0, float("-inf"))
@@ -37,7 +38,8 @@ class SelfAttention(nn.Module):
         attn_output = torch.matmul(attn_weights, v)  # (B, T, D)
 
         return self.out_proj(attn_output), attn_scores
-    
+
+
 if __name__ == "__main__":
     # Example input
     x = torch.rand(2, 5, 32)  # batch=2, seq_len=5, embed_dim=32
@@ -47,4 +49,3 @@ if __name__ == "__main__":
 
     print(out.shape)  # → torch.Size([2, 5, 32])
     print(attn_weights.shape)  # → torch.Size([2, 5, 5])
-    

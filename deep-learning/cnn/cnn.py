@@ -5,13 +5,19 @@ import torchvision
 import torchvision.transforms as transforms
 
 # Load Dataset
-transform = transforms.Compose([transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))])
-dataset = torchvision.datasets.MNIST(root='./data', train=True, download=True, transform=transform)
+transform = transforms.Compose(
+    [transforms.ToTensor(), transforms.Normalize((0.5,), (0.5,))]
+)
+dataset = torchvision.datasets.MNIST(
+    root="./data", train=True, download=True, transform=transform
+)
 
 training_size = int(0.8 * len(dataset))
 test_size = len(dataset) - training_size
 
-training_set, test_set = torch.utils.data.random_split(dataset, [training_size, test_size])
+training_set, test_set = torch.utils.data.random_split(
+    dataset, [training_size, test_size]
+)
 train_loader = torch.utils.data.DataLoader(training_set, batch_size=32, shuffle=True)
 test_loader = torch.utils.data.DataLoader(test_set, batch_size=32, shuffle=False)
 
@@ -20,7 +26,9 @@ test_loader = torch.utils.data.DataLoader(test_set, batch_size=32, shuffle=False
 class SimpleCNN(nn.Module):
     def __init__(self):
         super(SimpleCNN, self).__init__()
-        self.conv1 = nn.Conv2d(in_channels=1, out_channels=32, kernel_size=3, stride=1, padding=1)
+        self.conv1 = nn.Conv2d(
+            in_channels=1, out_channels=32, kernel_size=3, stride=1, padding=1
+        )
         self.pool = nn.MaxPool2d(kernel_size=2, stride=2, padding=0)
         self.conv2 = nn.Conv2d(32, 64, 3, 1, 1)
         self.fc1 = nn.Linear(64 * 7 * 7, 128)
@@ -60,6 +68,7 @@ class SimpleCNN(nn.Module):
             print("After fc2 (output):", x.shape)
 
         return x
+
 
 # Initialize model, loss, and optimizer
 model = SimpleCNN()

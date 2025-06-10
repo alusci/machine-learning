@@ -15,7 +15,7 @@
 
 ---
 
-## 🧠 Summary for Interviews
+## 🧠 Summary
 
 > “LSTMs process sequences one token at a time using memory cells and gating mechanisms, which makes them good for short- to mid-range dependencies but slow to train. Transformers instead use self-attention to relate all positions in the input simultaneously, allowing them to model long-range dependencies more effectively and in parallel — which is why they dominate in modern NLP and beyond.”
 

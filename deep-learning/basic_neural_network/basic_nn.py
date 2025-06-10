@@ -9,11 +9,15 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score
 
 
-def load_and_process_iris_data() -> Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]:
+def load_and_process_iris_data() -> (
+    Tuple[torch.Tensor, torch.Tensor, torch.Tensor, torch.Tensor]
+):
     iris = load_iris()
     X = iris.data
     y = iris.target
-    X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
+    X_train, X_val, y_train, y_val = train_test_split(
+        X, y, test_size=0.2, random_state=42, stratify=y
+    )
     scaler = StandardScaler()
     X_train = scaler.fit_transform(X_train)
     X_val = scaler.transform(X_val)
@@ -28,7 +32,7 @@ def load_and_process_iris_data() -> Tuple[torch.Tensor, torch.Tensor, torch.Tens
 
 # Define the neural network
 class BasicNN(nn.Module):
-    def __init__(self, input_size: int, hidden_size:int, output_size:int):
+    def __init__(self, input_size: int, hidden_size: int, output_size: int):
         super(BasicNN, self).__init__()
         self.fc1 = nn.Linear(input_size, hidden_size)
         self.relu = nn.ReLU()
@@ -65,7 +69,7 @@ if __name__ == "__main__":
         loss.backward()
         optimizer.step()
         if (epoch + 1) % 10 == 0:
-            print(f'Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}')
+            print(f"Epoch [{epoch + 1}/{num_epochs}], Loss: {loss.item():.4f}")
 
     # Validate the model
     model.eval()
@@ -73,4 +77,4 @@ if __name__ == "__main__":
         outputs = model(X_val)
         _, predicted = torch.max(outputs, 1)
         val_accuracy = accuracy_score(y_val, predicted)
-        print(f'Validation Accuracy: {val_accuracy * 100:.2f}%')
+        print(f"Validation Accuracy: {val_accuracy * 100:.2f}%")

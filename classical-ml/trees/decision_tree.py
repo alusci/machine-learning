@@ -28,6 +28,7 @@ Each test sample is passed through the tree based on the feature and threshold a
 
 import numpy as np
 
+
 class DecisionTree:
     def __init__(self, max_depth=None):
         self.max_depth = max_depth
@@ -86,7 +87,9 @@ class DecisionTree:
 
         left_entropy = self._entropy(y[left_idx])
         right_entropy = self._entropy(y[right_idx])
-        weighted_avg = (len(y[left_idx]) / len(y)) * left_entropy + (len(y[right_idx]) / len(y)) * right_entropy
+        weighted_avg = (len(y[left_idx]) / len(y)) * left_entropy + (
+            len(y[right_idx]) / len(y)
+        ) * right_entropy
 
         return parent_entropy - weighted_avg
 
@@ -107,13 +110,9 @@ class DecisionTree:
         else:
             return self._traverse_tree(x, node["right"])
 
+
 # Create a simple dataset
-X = np.array([[2.7, 2.5],
-              [1.3, 3.1],
-              [3.1, 1.5],
-              [1.5, 2.7],
-              [3.2, 3.3],
-              [1.0, 1.0]])
+X = np.array([[2.7, 2.5], [1.3, 3.1], [3.1, 1.5], [1.5, 2.7], [3.2, 3.3], [1.0, 1.0]])
 
 y = np.array([0, 1, 0, 1, 0, 1])  # Binary classification
 

@@ -4,6 +4,7 @@ import torch.nn.functional as F
 import math
 from multi_head_attention import MultiHeadSelfAttention
 
+
 class FeedForward(nn.Module):
     def __init__(self, embed_dim, expansion=4, dropout=0.1):
         super().__init__()
@@ -12,25 +13,29 @@ class FeedForward(nn.Module):
             nn.ReLU(),
             nn.Dropout(dropout),
             nn.Linear(embed_dim * expansion, embed_dim),
-            nn.Dropout(dropout)
+            nn.Dropout(dropout),
         )
 
     def forward(self, x):
         return self.net(x)
+
 
 class PositionalEncoding(nn.Module):
     def __init__(self, embed_dim, max_len=5000):
         super().__init__()
         pe = torch.zeros(max_len, embed_dim)
         position = torch.arange(0, max_len, dtype=torch.float).unsqueeze(1)
-        div_term = torch.exp(torch.arange(0, embed_dim, 2).float() * (-math.log(10000.0) / embed_dim))
+        div_term = torch.exp(
+            torch.arange(0, embed_dim, 2).float() * (-math.log(10000.0) / embed_dim)
+        )
         pe[:, 0::2] = torch.sin(position * div_term)
         pe[:, 1::2] = torch.cos(position * div_term)
         pe = pe.unsqueeze(0)
-        self.register_buffer('pe', pe)
+        self.register_buffer("pe", pe)
 
     def forward(self, x):
-        return x + self.pe[:, :x.size(1)]
+        return x + self.pe[:, : x.size(1)]
+
 
 class DecoderBlock(nn.Module):
     def __init__(self, embed_dim, num_heads, dropout=0.1):
@@ -45,14 +50,17 @@ class DecoderBlock(nn.Module):
         x = self.norm2(x + self.ffn(x))
         return x
 
+
 class Decoder(nn.Module):
-    def __init__(self, vocab_size, embed_dim, num_heads, num_layers, max_len=512, dropout=0.1):
+    def __init__(
+        self, vocab_size, embed_dim, num_heads, num_layers, max_len=512, dropout=0.1
+    ):
         super().__init__()
         self.embed = nn.Embedding(vocab_size, embed_dim)
         self.pos_encoder = PositionalEncoding(embed_dim, max_len)
-        self.layers = nn.ModuleList([
-            DecoderBlock(embed_dim, num_heads, dropout) for _ in range(num_layers)
-        ])
+        self.layers = nn.ModuleList(
+            [DecoderBlock(embed_dim, num_heads, dropout) for _ in range(num_layers)]
+        )
         self.ln = nn.LayerNorm(embed_dim)
         self.output = nn.Linear(embed_dim, vocab_size)
 

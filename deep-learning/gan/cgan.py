@@ -13,6 +13,7 @@ y = np.random.randint(0, 2, size=(n_samples, 1)).astype(np.float32)
 dataset = TensorDataset(torch.tensor(X), torch.tensor(y))
 dataloader = DataLoader(dataset, batch_size=128, shuffle=True)
 
+
 # Generator
 class Generator(nn.Module):
     def __init__(self, noise_dim, label_dim, output_dim):
@@ -22,12 +23,13 @@ class Generator(nn.Module):
             nn.ReLU(),
             nn.Linear(64, 64),
             nn.ReLU(),
-            nn.Linear(64, output_dim)
+            nn.Linear(64, output_dim),
         )
 
     def forward(self, z, labels):
         x = torch.cat((z, labels), dim=1)
         return self.model(x)
+
 
 # Discriminator
 class Discriminator(nn.Module):
@@ -39,13 +41,13 @@ class Discriminator(nn.Module):
             nn.Linear(64, 64),
             nn.ReLU(),
             nn.Linear(64, 1),
-            nn.Sigmoid()
+            nn.Sigmoid(),
         )
 
     def forward(self, x, labels):
         x = torch.cat((x, labels), dim=1)
         return self.model(x)
-    
+
 
 noise_dim = 20
 G = Generator(noise_dim, 1, n_features)
@@ -83,7 +85,9 @@ for epoch in range(100):
         loss_g.backward()
         opt_G.step()
 
-    print(f"Epoch {epoch:02d} | D Loss: {loss_d.item():.4f} | G Loss: {loss_g.item():.4f}")
+    print(
+        f"Epoch {epoch:02d} | D Loss: {loss_d.item():.4f} | G Loss: {loss_g.item():.4f}"
+    )
 
 
 # Generate synthetic samples conditioned on fraud label

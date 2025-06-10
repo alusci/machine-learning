@@ -20,7 +20,7 @@ In deep neural networks, **internal covariate shift** refers to the phenomenon w
 
 ---
 
-## 📌 Clarification for Interviews
+## 📌 Clarification
 
 > While BatchNorm is often said to "reduce internal covariate shift," more recent insights suggest that its benefits may also come from **smoother loss landscapes** and **improved gradient flow**, not just normalization alone.
 

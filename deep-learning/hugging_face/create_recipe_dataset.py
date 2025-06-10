@@ -27,7 +27,11 @@ output_labels = np.array(output_labels, dtype="int64")
 print("Created input_text and output_labels")
 
 neg_count, pos_count = np.bincount(output_labels)
-print("Proportion of positive samples: {}".format(int(pos_count / (neg_count+pos_count)) * 100))
+print(
+    "Proportion of positive samples: {}".format(
+        int(pos_count / (neg_count + pos_count)) * 100
+    )
+)
 
 np.random.seed(0)
 idx = np.arange(len(output_labels))
@@ -40,19 +44,17 @@ print("Dataset is shuffled")
 
 num_training = len(output_labels) // 2
 
-dataset = DatasetDict({
-    "train": Dataset.from_dict({
-            "label":output_labels[0:num_training],
-            "text":input_text[0:num_training]}
+dataset = DatasetDict(
+    {
+        "train": Dataset.from_dict(
+            {"label": output_labels[0:num_training], "text": input_text[0:num_training]}
         ),
-    "validation": Dataset.from_dict({
-            "label":output_labels[num_training:],
-            "text":input_text[num_training:]}
-        )
-})
+        "validation": Dataset.from_dict(
+            {"label": output_labels[num_training:], "text": input_text[num_training:]}
+        ),
+    }
+)
 
 print(dataset)
 
 dataset.save_to_disk("data/recipe-classification-dataset")
-
-

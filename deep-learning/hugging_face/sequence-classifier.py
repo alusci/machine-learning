@@ -6,7 +6,7 @@ from transformers import (
     AutoModelForSequenceClassification,
     DataCollatorWithPadding,
     TrainingArguments,
-    Trainer
+    Trainer,
 )
 
 from peft import PeftModel, PeftConfig, get_peft_model, LoraConfig
@@ -25,10 +25,7 @@ def tokenize_function(examples):
     # Tokenize and truncate text
     tokenizer.truncation_side = "left"
     tokenized_inputs = tokenizer(
-        text,
-        return_tensors="np",
-        truncation=True,
-        max_length=512
+        text, return_tensors="np", truncation=True, max_length=512
     )
 
     return tokenized_inputs
@@ -38,13 +35,7 @@ def compute_metrics(p):
     predictions, labels = p
     predictions = np.argmax(predictions, axis=1)
 
-    return {
-        "accuracy": accuracy.compute(
-            predictions=predictions,
-            references=labels
-        )
-    }
-
+    return {"accuracy": accuracy.compute(predictions=predictions, references=labels)}
 
 
 if __name__ == "__main__":
@@ -53,7 +44,7 @@ if __name__ == "__main__":
 
     # Define label maps
     id2label = {0: "Negative", 1: "Positive"}
-    label2id = {"Negative":0, "Positive":1}
+    label2id = {"Negative": 0, "Positive": 1}
 
     # Generate classification model from model_checkpoint
     model = AutoModelForSequenceClassification.from_pretrained(
@@ -82,7 +73,7 @@ if __name__ == "__main__":
 
     # Add pad token if none exists
     if tokenizer.pad_token is None:
-        tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+        tokenizer.add_special_tokens({"pad_token": "[PAD]"})
         model.resize_token_embeddings(len(tokenizer))
 
     # Tokenize training and validation datasets
@@ -129,7 +120,7 @@ if __name__ == "__main__":
         r=4,  # Intrinsic rank of trainable weight matrix
         lora_alpha=32,  # This is like a learning rate
         lora_dropout=0.01,  # Probablity of dropout
-        target_modules=['q_lin']  # We apply lora to query layer only
+        target_modules=["q_lin"],  # We apply lora to query layer only
     )
 
     model = get_peft_model(model, peft_config)

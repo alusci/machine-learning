@@ -3,16 +3,30 @@ from decoder_only import Decoder
 
 # Toy vocabulary and tokenizer
 vocab = {
-    "hello": 0, "world": 1, "!": 2, "<bos>": 3, "<eos>": 4, "<pad>": 5,
-    "how": 6, "are": 7, "you": 8, "?": 9, "i": 10, "am": 11, "fine": 12
+    "hello": 0,
+    "world": 1,
+    "!": 2,
+    "<bos>": 3,
+    "<eos>": 4,
+    "<pad>": 5,
+    "how": 6,
+    "are": 7,
+    "you": 8,
+    "?": 9,
+    "i": 10,
+    "am": 11,
+    "fine": 12,
 }
 inv_vocab = {v: k for k, v in vocab.items()}
+
 
 def encode(text):
     return [vocab.get(t, vocab["<pad>"]) for t in text.split()]
 
+
 def decode(tokens):
     return " ".join(inv_vocab.get(t, "<unk>") for t in tokens)
+
 
 # Initialize model
 vocab_size = len(vocab)
